@@ -1,0 +1,5 @@
+{
+  "name": "NeonFlow - AI Student Manager",
+  "description": "A full-stack style student management dashboard designed for PostgreSQL (Neon), featuring AI-powered SQL generation and data analytics.",
+  "requestFramePermissions": []
+}
