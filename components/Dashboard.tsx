@@ -15,7 +15,7 @@ const Dashboard: React.FC<DashboardProps> = ({ students }) => {
     const total = students.length;
     const active = students.filter(s => s.status === 'Active').length;
     const probation = students.filter(s => s.status === 'Probation').length;
-    const avgGpa = (students.reduce((acc, s) => acc + s.gpa, 0) / total).toFixed(2);
+    const avgGpa = total > 0 ? (students.reduce((acc, s) => acc + s.gpa, 0) / total).toFixed(2) : "0.00";
     return { total, active, probation, avgGpa };
   }, [students]);
 
@@ -35,56 +35,56 @@ const Dashboard: React.FC<DashboardProps> = ({ students }) => {
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
   }, [students]);
 
+  const StatCard = ({ icon: Icon, colorClass, title, value }: any) => (
+    <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-100 flex items-center space-x-4">
+        <div className={`p-3 rounded-lg ${colorClass}`}>
+            <Icon size={24} />
+        </div>
+        <div>
+            <p className="text-sm text-slate-500 font-medium">{title}</p>
+            <h3 className="text-2xl font-bold text-slate-800">{value}</h3>
+        </div>
+    </div>
+  );
+
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center space-x-4">
-          <div className="p-3 bg-indigo-100 text-indigo-600 rounded-lg">
-            <Users size={24} />
-          </div>
-          <div>
-            <p className="text-sm text-slate-500 font-medium">Total Students</p>
-            <h3 className="text-2xl font-bold text-slate-800">{stats.total}</h3>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center space-x-4">
-          <div className="p-3 bg-emerald-100 text-emerald-600 rounded-lg">
-            <TrendingUp size={24} />
-          </div>
-          <div>
-            <p className="text-sm text-slate-500 font-medium">Average GPA</p>
-            <h3 className="text-2xl font-bold text-slate-800">{stats.avgGpa}</h3>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center space-x-4">
-          <div className="p-3 bg-blue-100 text-blue-600 rounded-lg">
-            <GraduationCap size={24} />
-          </div>
-          <div>
-            <p className="text-sm text-slate-500 font-medium">Active Enrolled</p>
-            <h3 className="text-2xl font-bold text-slate-800">{stats.active}</h3>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center space-x-4">
-          <div className="p-3 bg-amber-100 text-amber-600 rounded-lg">
-            <AlertTriangle size={24} />
-          </div>
-          <div>
-            <p className="text-sm text-slate-500 font-medium">Probation Risk</p>
-            <h3 className="text-2xl font-bold text-slate-800">{stats.probation}</h3>
-          </div>
-        </div>
+    <div className="space-y-4 md:space-y-6 animate-fade-in pb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard 
+            icon={Users} 
+            colorClass="bg-indigo-100 text-indigo-600" 
+            title="Total Students" 
+            value={stats.total} 
+        />
+        <StatCard 
+            icon={TrendingUp} 
+            colorClass="bg-emerald-100 text-emerald-600" 
+            title="Average GPA" 
+            value={stats.avgGpa} 
+        />
+        <StatCard 
+            icon={GraduationCap} 
+            colorClass="bg-blue-100 text-blue-600" 
+            title="Active Enrolled" 
+            value={stats.active} 
+        />
+        <StatCard 
+            icon={AlertTriangle} 
+            colorClass="bg-amber-100 text-amber-600" 
+            title="Probation Risk" 
+            value={stats.probation} 
+        />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col min-h-[300px] md:min-h-[350px]">
           <h4 className="text-lg font-semibold text-slate-800 mb-4">Top Majors</h4>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={majorData} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
+          <div className="flex-1 w-full h-56 md:h-64 min-h-[200px]">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+              <BarChart data={majorData} layout="vertical" margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
                 <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" width={100} tick={{fontSize: 12}} />
+                <YAxis dataKey="name" type="category" width={90} tick={{fontSize: 11}} interval={0} />
                 <Tooltip cursor={{fill: '#f1f5f9'}} />
                 <Bar dataKey="value" fill="#6366f1" radius={[0, 4, 4, 0]} barSize={20} />
               </BarChart>
@@ -92,17 +92,17 @@ const Dashboard: React.FC<DashboardProps> = ({ students }) => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-          <h4 className="text-lg font-semibold text-slate-800 mb-4">Student Status Distribution</h4>
-          <div className="h-64">
-             <ResponsiveContainer width="100%" height="100%">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col min-h-[300px] md:min-h-[350px]">
+          <h4 className="text-lg font-semibold text-slate-800 mb-4">Status Distribution</h4>
+          <div className="flex-1 w-full h-56 md:h-64 min-h-[200px]">
+             <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
               <PieChart>
                 <Pie
                   data={statusData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
+                  innerRadius={50}
+                  outerRadius={70}
                   paddingAngle={5}
                   dataKey="value"
                 >
@@ -113,10 +113,10 @@ const Dashboard: React.FC<DashboardProps> = ({ students }) => {
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
-            <div className="flex justify-center gap-4 mt-2">
+            <div className="flex justify-center gap-3 mt-2 flex-wrap">
               {statusData.map((entry, index) => (
                 <div key={entry.name} className="flex items-center text-xs">
-                  <span className="w-2 h-2 rounded-full mr-2" style={{backgroundColor: COLORS[index % COLORS.length]}}></span>
+                  <span className="w-2 h-2 rounded-full mr-1.5" style={{backgroundColor: COLORS[index % COLORS.length]}}></span>
                   {entry.name}
                 </div>
               ))}

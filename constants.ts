@@ -1,6 +1,6 @@
 import { Student } from './types';
 
-export const NEON_CONNECTION_STRING = "postgresql://neondb_owner:npg_sy3awVU4TGcf@ep-plain-feather-ad49lltc-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require";
+export const NEON_CONNECTION_STRING = "postgresql://neondb_owner:npg_sy3awVU4TGcf@ep-plain-feather-ad49lltc-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
 
 export const INITIAL_STUDENTS: Student[] = [
   { id: 1001, first_name: "Alice", last_name: "Johnson", email: "alice.j@university.edu", major: "Computer Science", gpa: 3.8, status: "Active", enrollment_date: "2023-09-01" },
